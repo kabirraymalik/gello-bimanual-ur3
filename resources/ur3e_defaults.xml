@@ -1,0 +1,176 @@
+<mujoco model="ur3e_defaults">
+  <compiler angle="radian" meshdir="assets" autolimits="true"/>
+  <default>
+    <default class="size3">
+      <default class="size3_limited">
+        <joint range="-6.28 6.28"/>
+        <general ctrlrange="-6.28 6.28"/>
+      </default>
+    </default>
+    <default class="size1">
+      <general gainprm="500" biasprm="0 -500 -100" forcerange="-28 28"/>
+    </default>
+    <default class="visual">
+      <geom group="2" type="mesh" contype="0" conaffinity="0"/>
+    </default>
+    <default class="collision">
+      <geom group="3" type="mesh"/>
+    </default>
+  </default>
+  <asset>
+    <material name="mat_1" specular="0.484529" shininess="1.0" rgba="0.250980 0.250980 0.250980 1.000000"/>
+    <material name="mat_1.001" specular="0.484529" shininess="1.0" rgba="0.698039 0.698039 0.698039 1.000000"/>
+    <material name="mat_1.002" specular="0.484529" shininess="1.0" rgba="0.898039 0.898039 0.898039 1.000000"/>
+    <material name="mat_1.003" specular="0.484529" shininess="1.0" rgba="0.898039 0.898039 0.898039 1.000000"/>
+    <material name="mat_1.004" specular="0.484529" shininess="1.0" rgba="0.898039 0.898039 0.898039 1.000000"/>
+    <material name="mat_1.005" specular="0.484529" shininess="1.0" rgba="0.898039 0.898039 0.898039 1.000000"/>
+    <material name="mat_1.006" specular="0.484529" shininess="1.0" rgba="0.898039 0.898039 0.898039 1.000000"/>
+    <material name="mat_10" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_11" specular="0.484529" shininess="1.0" rgba="0.698039 0.698039 0.698039 1.000000"/>
+    <material name="mat_12" specular="0.484529" shininess="1.0" rgba="0.631373 0.588235 0.509804 1.000000"/>
+    <material name="mat_13" specular="0.484529" shininess="1.0" rgba="0.949020 0.760784 0.180392 1.000000"/>
+    <material name="mat_14" specular="0.484529" shininess="1.0" rgba="0.000000 0.639216 0.000000 1.000000"/>
+    <material name="mat_15" specular="0.484529" shininess="1.0" rgba="1.000000 0.000000 0.000000 1.000000"/>
+    <material name="mat_2" specular="0.484529" shininess="1.0" rgba="0.854902 0.874510 0.858824 1.000000"/>
+    <material name="mat_2.001" specular="0.484529" shininess="1.0" rgba="0.250980 0.250980 0.250980 1.000000"/>
+    <material name="mat_2.002" specular="0.484529" shininess="1.0" rgba="0.752941 0.752941 0.752941 1.000000"/>
+    <material name="mat_2.003" specular="0.484529" shininess="1.0" rgba="0.482353 0.792157 1.000000 1.000000"/>
+    <material name="mat_2.004" specular="0.484529" shininess="1.0" rgba="0.482353 0.792157 1.000000 1.000000"/>
+    <material name="mat_2.005" specular="0.484529" shininess="1.0" rgba="0.482353 0.792157 1.000000 1.000000"/>
+    <material name="mat_2.006" specular="0.484529" shininess="1.0" rgba="0.482353 0.792157 1.000000 1.000000"/>
+    <material name="mat_3" specular="0.484529" shininess="1.0" rgba="0.101961 0.101961 0.101961 1.000000"/>
+    <material name="mat_3.001" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_3.002" specular="0.484529" shininess="1.0" rgba="0.482353 0.792157 1.000000 1.000000"/>
+    <material name="mat_3.003" specular="0.484529" shininess="1.0" rgba="0.752941 0.752941 0.752941 1.000000"/>
+    <material name="mat_3.004" specular="0.484529" shininess="1.0" rgba="0.752941 0.752941 0.752941 1.000000"/>
+    <material name="mat_3.005" specular="0.484529" shininess="1.0" rgba="0.752941 0.752941 0.752941 1.000000"/>
+    <material name="mat_3.006" specular="0.484529" shininess="1.0" rgba="0.752941 0.752941 0.752941 1.000000"/>
+    <material name="mat_4" specular="0.484529" shininess="1.0" rgba="0.298039 0.298039 0.298039 1.000000"/>
+    <material name="mat_4.001" specular="0.484529" shininess="1.0" rgba="0.796078 0.823529 0.937255 1.000000"/>
+    <material name="mat_4.002" specular="0.484529" shininess="1.0" rgba="0.250980 0.250980 0.250980 1.000000"/>
+    <material name="mat_4.003" specular="0.484529" shininess="1.0" rgba="1.000000 1.000000 0.000000 1.000000"/>
+    <material name="mat_4.004" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_4.005" specular="0.484529" shininess="1.0" rgba="0.792157 0.819608 0.933333 1.000000"/>
+    <material name="mat_4.006" specular="0.484529" shininess="1.0" rgba="0.647059 0.619608 0.588235 1.000000"/>
+    <material name="mat_5" specular="0.484529" shininess="1.0" rgba="0.666667 0.698039 0.768627 1.000000"/>
+    <material name="mat_5.001" specular="0.484529" shininess="1.0" rgba="0.792157 0.819608 0.933333 1.000000"/>
+    <material name="mat_5.002" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_5.003" specular="0.484529" shininess="1.0" rgba="1.000000 0.956863 0.184314 1.000000"/>
+    <material name="mat_5.004" specular="0.484529" shininess="1.0" rgba="0.250980 0.250980 0.250980 1.000000"/>
+    <material name="mat_5.005" specular="0.484529" shininess="1.0" rgba="0.647059 0.619608 0.588235 1.000000"/>
+    <material name="mat_5.006" specular="0.484529" shininess="1.0" rgba="0.250980 0.250980 0.250980 1.000000"/>
+    <material name="mat_6" specular="0.484529" shininess="1.0" rgba="0.647059 0.517647 0.000000 1.000000"/>
+    <material name="mat_6.001" specular="0.484529" shininess="1.0" rgba="0.866667 0.909804 1.000000 1.000000"/>
+    <material name="mat_6.002" specular="0.484529" shininess="1.0" rgba="0.792157 0.819608 0.933333 1.000000"/>
+    <material name="mat_6.003" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_6.004" specular="0.484529" shininess="1.0" rgba="0.698039 0.698039 0.698039 1.000000"/>
+    <material name="mat_6.005" specular="0.484529" shininess="1.0" rgba="0.250980 0.250980 0.250980 1.000000"/>
+    <material name="mat_6.006" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_7" specular="0.484529" shininess="1.0" rgba="0.788235 0.066667 0.117647 1.000000"/>
+    <material name="mat_7.001" specular="0.484529" shininess="1.0" rgba="0.698039 0.698039 0.698039 1.000000"/>
+    <material name="mat_7.002" specular="0.484529" shininess="1.0" rgba="0.792157 0.819608 0.933333 1.000000"/>
+    <material name="mat_7.003" specular="0.484529" shininess="1.0" rgba="0.384314 0.384314 0.384314 1.000000"/>
+    <material name="mat_7.004" specular="0.484529" shininess="1.0" rgba="0.792157 0.819608 0.933333 1.000000"/>
+    <material name="mat_8" specular="0.484529" shininess="1.0" rgba="0.800000 0.807843 0.800000 1.000000"/>
+    <material name="mat_8.001" specular="0.484529" shininess="1.0" rgba="0.792157 0.819608 0.933333 1.000000"/>
+    <material name="mat_8.002" specular="0.484529" shininess="1.0" rgba="0.647059 0.619608 0.588235 1.000000"/>
+    <material name="mat_9" specular="0.484529" shininess="1.0" rgba="0.647059 0.619608 0.588235 1.000000"/>
+    <mesh file="ur3e_scaled_0.obj"/>
+    <mesh file="ur3e_scaled_1.obj"/>
+    <mesh file="ur3e_scaled_2.obj"/>
+    <mesh file="ur3e_scaled_3.obj"/>
+    <mesh file="ur3e_scaled_4.obj"/>
+    <mesh file="ur3e_scaled_5.obj"/>
+    <mesh file="ur3e_scaled_6.obj"/>
+    <mesh file="ur3e_scaled_7.obj"/>
+    <mesh file="ur3e_scaled_8.obj"/>
+    <mesh file="ur3e_scaled_9.obj"/>
+    <mesh file="ur3e_scaled_10.obj"/>
+    <mesh file="ur3e_scaled_11.obj"/>
+    <mesh file="ur3e_scaled_12.obj"/>
+    <mesh file="ur3e_scaled_13.obj"/>
+    <mesh file="ur3e_scaled_14.obj"/>
+    <mesh file="ur3e_scaled_15.obj"/>
+    <mesh file="ur3e_scaled_16.obj"/>
+    <mesh file="ur3e_scaled_17.obj"/>
+    <mesh file="ur3e_scaled_18.obj"/>
+    <mesh file="ur3e_scaled_19.obj"/>
+    <mesh file="ur3e_scaled_20.obj"/>
+    <mesh file="ur3e_scaled_21.obj"/>
+    <!-- <mesh file="ur3e_scaled_22.obj"/> -->
+    <mesh file="ur3e_scaled_23.obj"/>
+    <mesh file="ur3e_scaled_24.obj"/>
+    <mesh file="ur3e_scaled_25.obj"/>
+    <mesh file="ur3e_scaled_26.obj"/>
+    <mesh file="ur3e_scaled_27.obj"/>
+    <mesh file="ur3e_scaled_28.obj"/>
+    <mesh file="ur3e_scaled_29.obj"/>
+    <mesh file="ur3e_scaled_30.obj"/>
+    <mesh file="ur3e_scaled_31.obj"/>
+    <mesh file="ur3e_scaled_32.obj"/>
+    <mesh file="ur3e_scaled_33.obj"/>
+    <mesh file="ur3e_scaled_34.obj"/>
+    <mesh file="ur3e_scaled_35.obj"/>
+    <mesh file="ur3e_scaled_36.obj"/>
+    <mesh file="ur3e_scaled_37.obj"/>
+    <mesh file="ur3e_scaled_38.obj"/>
+    <mesh file="ur3e_scaled_39.obj"/>
+    <mesh file="ur3e_scaled_40.obj"/>
+    <mesh file="ur3e_scaled_41.obj"/>
+    <mesh file="ur3e_scaled_42.obj"/>
+    <mesh file="ur3e_scaled_43.obj"/>
+    <mesh file="ur3e_scaled_44.obj"/>
+    <mesh file="ur3e_scaled_45.obj"/>
+    <mesh file="ur3e_scaled_46.obj"/>
+    <mesh file="ur3e_scaled_47.obj"/>
+    <mesh file="ur3e_scaled_48.obj"/>
+    <mesh file="ur3e_scaled_49.obj"/>
+    <mesh file="ur3e_scaled_50.obj"/>
+    <mesh file="ur3e_scaled_51.obj"/>
+    <mesh file="ur3e_scaled_52.obj"/>
+    <mesh file="ur3e_scaled_53.obj"/>
+    <mesh file="ur3e_scaled_54.obj"/>
+    <mesh file="ur3e_scaled_55.obj"/>
+    <mesh file="ur3e_scaled_56.obj"/>
+
+    <!-- 3D printed Wrist -->
+    <mesh file="wrist_taller.stl"/>
+    
+    <!-- Left AbilityHand -->
+    <mesh name="ability_left:wristmesh" file="ability/left/wristmesh.STL"/>
+    <mesh name="ability_left:FB_palm_ref" file="ability/left/FB_palm_ref.STL"/>
+    <mesh name="ability_left:palm_hull" file="ability/left/palm_hull.STL"/>
+    <mesh name="ability_left:idx-F1" file="ability/left/idx-F1.STL"/>
+    <mesh name="ability_left:idx-F1-hull" file="ability/left/idx-F1-hull.STL"/>
+    <mesh name="ability_left:idx-F2" file="ability/left/idx-F2.STL"/>
+    <mesh name="ability_left:idx-F2-hull" file="ability/left/idx-F2-hull.STL"/>
+    <mesh name="ability_left:thumb-F1" file="ability/left/thumb-F1.STL"/>
+    <mesh name="ability_left:thumb-F1-hull" file="ability/left/thumb-F1-hull.STL"/>
+    <mesh name="ability_left:thumb-F2" file="ability/left/thumb-F2.STL"/>
+    <mesh name="ability_left:thumb-F2-hull" file="ability/left/thumb-F2-hull.STL"/>
+
+    <!-- Right AbilityHand -->
+    <mesh name="ability_right:wristmesh" file="ability/right/wristmesh.STL"/>
+    <mesh name="ability_right:FB_palm_ref_MIR" file="ability/right/FB_palm_ref_MIR.STL"/>
+    <mesh name="ability_right:palm_hull_mir" file="ability/right/palm_hull_mir.STL"/>
+    <mesh name="ability_right:idx-F1" file="ability/right/idx-F1.STL"/>
+    <mesh name="ability_right:idx-F1-hull" file="ability/right/idx-F1-hull.STL"/>
+    <mesh name="ability_right:idx-F2" file="ability/right/idx-F2.STL"/>
+    <mesh name="ability_right:idx-F2-hull" file="ability/right/idx-F2-hull.STL"/>
+    <mesh name="ability_right:thumb-F1-MIR" file="ability/right/thumb-F1-MIR.STL"/>
+    <mesh name="ability_right:thumb-F1-MIR-hull" file="ability/right/thumb-F1-MIR-hull.STL"/>
+    <mesh name="ability_right:thumb-F2" file="ability/right/thumb-F2.STL"/>
+    <mesh name="ability_right:thumb-F2-hull" file="ability/right/thumb-F2-hull.STL"/>
+
+    <!-- Stand -->
+    <!-- <mesh name="stand:base" file="VB2308004230816/VB2308004230816_base.obj"/>
+    <mesh name="stand:height" file="VB2308004230816/VB2308004230816_height.obj"/> -->
+
+    <!-- <mesh name="stand:base" file="stand_final/scaled_base.obj"/>
+    <mesh name="stand:height" file="stand_final/scaled_shoulder.obj"/> -->
+
+    <mesh name="stand:base" file="ucb_stand/base.obj"/>
+    <mesh name="stand:height" file="ucb_stand/shoulders.obj"/>
+
+  </asset>
+</mujoco>
