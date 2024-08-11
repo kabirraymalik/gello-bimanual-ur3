@@ -34,7 +34,6 @@ gripper_range = 550
 
 for id in range(len(offsets)):
   offsets[id] = offsets[id] * np.pi
-  
 
 def init_controller(model, data):
   pass
@@ -50,19 +49,33 @@ def controller(model, data):
   #gello data recording
 
   #right arm
-  offset = 16
+  offset = 16 #in array positions to control the right arm instead of the left
   motor_positions = dmR.log_motor_positions()
-  for motor_id in range(len(motor_positions)-1):
-    if joint_orientations[motor_id] == -1:
+  print(motor_positions)
+
+  for motor_id in range(len(motor_positions)-1): #only iterating through non-gripper motors
+    if joint_orientations[motor_id] == -1: #handling reversed motors
         val = motor_positions[motor_id] + offsets[motor_id]
         difference = start_angles[motor_id] - val
         data.qpos[motor_id + offset] = start_angles[motor_id] + difference
+        data.qpos[motor_id] = start_angles[motor_id] + difference
     else:
+      data.qpos[motor_id] = start_angles[motor_id]
       data.qpos[motor_id + offset] = motor_positions[motor_id] + offsets[motor_id]
   
   #right hand
   trigger_pos = dmR.get_position(7)
-  data.qpos[21] = ability_macro(trigger_pos)
+  data.qpos[6] = ability_macro(trigger_pos)
+  data.qpos[7] = ability_macro(trigger_pos)
+  data.qpos[8] = ability_macro(trigger_pos)
+  data.qpos[9] = ability_macro(trigger_pos)
+  data.qpos[10] = ability_macro(trigger_pos)
+  data.qpos[11] = ability_macro(trigger_pos)
+  data.qpos[12] = ability_macro(trigger_pos)
+  data.qpos[13] = ability_macro(trigger_pos)
+  data.qpos[14] = ability_macro(trigger_pos)
+  data.qpos[15] = 2*ability_macro(trigger_pos)
+  
   data.qpos[22] = ability_macro(trigger_pos)
   data.qpos[23] = ability_macro(trigger_pos)
   data.qpos[24] = ability_macro(trigger_pos)
@@ -72,6 +85,8 @@ def controller(model, data):
   data.qpos[28] = ability_macro(trigger_pos)
   data.qpos[29] = ability_macro(trigger_pos)
   data.qpos[30] = ability_macro(trigger_pos)
+  data.qpos[31] = 2*ability_macro(trigger_pos)
+  
 
 #print output   
   #print(f"sim thetas: {data.qpos[0]} | {data.qpos[1]} | {data.qpos[2]} | {data.qpos[3]} | {data.qpos[4]} | {data.qpos[5]}")
@@ -91,9 +106,6 @@ with mujoco.viewer.launch_passive(m, d) as viewer:
   while viewer.is_running():
     step_start = time.time()
     if not paused:
-        
-        print(f'position motor 6: {dmR.get_position(6)}')
-
         # mj_step can be replaced with code that also evaluates
         # a policy and applies a control signal before stepping the physics.
         mujoco.mj_step(m, d)
