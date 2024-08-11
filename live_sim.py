@@ -25,7 +25,7 @@ d = mujoco.MjData(m)
 start_angles = [0, 3*np.pi/2, np.pi/2, 3*np.pi/2, 3*np.pi/2, 0]
 
 #gello info
-motorAngles = []
+
 #-1.0334554334554336
 offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, 0.00012210012210012692, -2.056166056166056]
 joint_orientations = [1, 1, -1, 1, 1, 1]
@@ -58,24 +58,12 @@ def controller(model, data):
         val = motor_positions[motor_id] + offsets[motor_id]
         difference = start_angles[motor_id] - val
         data.qpos[motor_id + offset] = start_angles[motor_id] + difference
-        data.qpos[motor_id] = start_angles[motor_id] + difference
     else:
-      data.qpos[motor_id] = start_angles[motor_id]
       data.qpos[motor_id + offset] = motor_positions[motor_id] + offsets[motor_id]
   
   #right hand
   trigger_pos = dmR.get_position(7)
-  data.qpos[6] = ability_macro(trigger_pos)
-  data.qpos[7] = ability_macro(trigger_pos)
-  data.qpos[8] = ability_macro(trigger_pos)
-  data.qpos[9] = ability_macro(trigger_pos)
-  data.qpos[10] = ability_macro(trigger_pos)
-  data.qpos[11] = ability_macro(trigger_pos)
-  data.qpos[12] = ability_macro(trigger_pos)
-  data.qpos[13] = ability_macro(trigger_pos)
-  data.qpos[14] = ability_macro(trigger_pos)
-  data.qpos[15] = 2*ability_macro(trigger_pos)
-  
+
   data.qpos[22] = ability_macro(trigger_pos)
   data.qpos[23] = ability_macro(trigger_pos)
   data.qpos[24] = ability_macro(trigger_pos)

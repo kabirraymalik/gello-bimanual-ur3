@@ -294,14 +294,72 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
+import dynamixel_utils, os
 
 if __name__ == "__main__":
+
+    #robot init
+
     # url = UR3EArm("10.42.1.100", "left")
     urr = UR3EArm("10.42.0.100", "right")
     url = UR3EArm("10.42.1.100", "left")
-    
+
     urr.move_joint(DEFAULT_UR3E_POS['right'])
     url.move_joint(DEFAULT_UR3E_POS['left'])
+
+    urL_angles = []
+
+    #gello init
+
+    offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, 0.00012210012210012692, -2.056166056166056]
+    start_angles = [0, 3*np.pi/2, np.pi/2, 3*np.pi/2, 3*np.pi/2, 0]
+    desired_URL_start_angles = [-4.065179173146383, -0.8556114000133057, 1.419995133076803, -3.108495374719137, -1.3419583479510706, 0]
+    joint_orientations = [1, 1, -1, 1, 1, 1]
+    gripper_open_pos = 1206
+    gripper_range = 550
+
+    #dynamixel setup
+    if os.path.exists("/dev/serial"):
+        device_name = "/dev/serial/by-id/usb-FTDI_USB__-__Serial_Converter_FT94VY5B-if00-port0"
+    else:
+        device_name = "/dev/tty.usbserial-FT94VY5B"
+    motors = ['XL330', 'XL330', 'XL330', 'XL330', 'XL330', 'XL330', 'XL330']
+
+    dmR = dynamixel_utils.DynaManager(device_name, motors)
+
+    base_refresh_rate = 50 #Hz
+    start_time,last_refresh = time.time()
+    stopped = False
+
+
+    while not stopped:
+
+        #runtime limit 10s
+        if time.time()-start_time>20:
+            stopped = True
+
+        motor_positions = dmR.log_motor_positions()
+
+        for motor_id in range(len(motor_positions)-1): #only iterating through non-gripper motors
+            if joint_orientations[motor_id] == -1: #handling reversed motors
+                val = motor_positions[motor_id] + offsets[motor_id]
+                difference = start_angles[motor_id] - val
+                urL_angles[motor_id] = start_angles[motor_id] + difference
+            else:
+                urL_angles[motor_id] = motor_positions[motor_id] + offsets[motor_id]
+
+        print(f'|  URL : {urL_angles} |')
+        print(f'| GELLO: {motor_positions} |')
+        print('============================================================')
+
+        #time control 
+        while (time.time()) < (last_refresh + 1.0/base_refresh_rate):
+            time.sleep(0.00001)
+            curr_time = time.time()
+            time_elapsed = curr_time - last_refresh
+            last_refresh = curr_time
+        #print(f'refresh rate: {1.0/time_elapsed} Hz')
     
-    # print(urr.get_joint_pos())
-    # print(url.get_joint_pos())
+    #return to home when done 
+    urr.move_joint(DEFAULT_UR3E_POS['right'])
+    url.move_joint(DEFAULT_UR3E_POS['left'])
