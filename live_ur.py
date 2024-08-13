@@ -1,54 +1,16 @@
+
+
 import rtde_control
 import rtde_receive
 import rtde_io
-import time
-import numpy as np
-import time
-
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d import Axes3D
 from loguru import logger
 from typing import List
-
-
-# play data
-DEFAULT_UR3E_POS = {
-    "right": np.array([
-        -2.198981587086813,
-        -2.2018891773619593,
-        -1.534730076789856,
-        -0.1098826688579102,
-        1.2620022296905518,
-        0,
-    ]),
-    "left": np.array([
-        -4.065179173146383,
-        -0.8556114000133057,
-        1.419995133076803,
-        -3.108495374719137,
-        -1.3419583479510706,
-        0,
-    ]),
-}
-
-## kitchen data
-#DEFAULT_UR3E_POS = {
-#    "right": np.array([
-#        -2.425814930592672,
-#        -1.7651893101134242,
-#        -2.0178232192993164,
-#        -0.08198674142871099,
-#        1.2157135009765625,
-#        -0.39373714128603154
-#    ]),
-#    "left": np.array([
-#        -3.857370376586914,
-#        -1.376403343476369,
-#        2.0178232192993164,
-#        -3.059605912161082,
-#        -1.2157135009765625,
-#        0.39373714128603154
-#    ]),
-#}
-
+import time
+import numpy as np
+import dynamixel_utils, os
 
 class UR3EArm:
     def __init__(self, ip, name):
@@ -289,31 +251,80 @@ class UR3EArm:
     def servo_stop(self):
         self.ur_c.servoStop()
 
+def compare_pos(pos1, pos2, desired_inaccuracy):
+    actual_inaccuracy = 0
+    for id in range(len(pos1)):
+        actual_inaccuracy += abs(pos2[id] - pos1[id])/pos2[id]
+    actual_inaccuracy /= len(pos1)
+    if actual_inaccuracy < desired_inaccuracy:
+        return True
+    return False
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D
-import dynamixel_utils, os
+
+# play data
+DEFAULT_UR3E_POS = {
+    "right": np.array([
+        -2.198981587086813,
+        -2.2018891773619593,
+        -1.534730076789856,
+        -0.1098826688579102,
+        1.2620022296905518,
+        0,
+    ]),
+    "left": np.array([
+        -4.065179173146383,
+        -0.8556114000133057,
+        1.419995133076803,
+        -3.108495374719137,
+        -1.3419583479510706,
+        0,
+    ]),
+}
+
+## kitchen data
+#DEFAULT_UR3E_POS = {
+#    "right": np.array([
+#        -2.425814930592672,
+#        -1.7651893101134242,
+#        -2.0178232192993164,
+#        -0.08198674142871099,
+#        1.2157135009765625,
+#        -0.39373714128603154
+#    ]),
+#    "left": np.array([
+#        -3.857370376586914,
+#        -1.376403343476369,
+#        2.0178232192993164,
+#        -3.059605912161082,
+#        -1.2157135009765625,
+#        0.39373714128603154
+#    ]),
+#}
 
 if __name__ == "__main__":
 
     #robot init
 
-    # url = UR3EArm("10.42.1.100", "left")
-    urr = UR3EArm("10.42.0.100", "right")
     url = UR3EArm("10.42.1.100", "left")
+    urr = UR3EArm("10.42.0.100", "right")
+    #url = UR3EArm("10.42.1.100", "left")
 
     urr.move_joint(DEFAULT_UR3E_POS['right'])
     url.move_joint(DEFAULT_UR3E_POS['left'])
 
-    urL_angles = []
-
     #gello init
 
-    offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, 0.00012210012210012692, -2.056166056166056]
-    start_angles = [0, 3*np.pi/2, np.pi/2, 3*np.pi/2, 3*np.pi/2, 0]
-    desired_URL_start_angles = [-4.065179173146383, -0.8556114000133057, 1.419995133076803, -3.108495374719137, -1.3419583479510706, 0]
+    default_gello_pos = [2.1956625578935256, 2.2769833933710637, 2.7909924478045585, 5.976314229905857, 1.4376909970274168, 6.860102932454195]
+    default_gello_pos = [2.3184109888030173, 2.364441650394076, 3.0610389958054394, 0.00015343553863686414, 1.8627074390515306, 6.375246630361705]
+
+
+    #offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, -1, -2.056166056166056]
+
+    urL_angles = [0,0,0,0,0,0]
+
+    #start_angles = [0, 3*np.pi/2, np.pi/2, 3*np.pi/2, 3*np.pi/2, 0]
+    URL_start_angles = [-4.065179173146383, -0.8556114000133057, 1.419995133076803, -3.108495374719137, -1.3419583479510706, 0]
+    prev_pos = URL_start_angles
     joint_orientations = [1, 1, -1, 1, 1, 1]
     gripper_open_pos = 1206
     gripper_range = 550
@@ -327,30 +338,58 @@ if __name__ == "__main__":
 
     dmR = dynamixel_utils.DynaManager(device_name, motors)
 
+    #config
     base_refresh_rate = 50 #Hz
-    start_time,last_refresh = time.time()
+    runtime = 30 #s
+    half_range = 1 #motor angle range limits for safety
+
+
+    start_time = time.time()
+    last_refresh = start_time
     stopped = False
+    enable = False
 
 
     while not stopped:
 
-        #runtime limit 10s
-        if time.time()-start_time>20:
+        #runtime limit
+        if time.time()-start_time>runtime:
             stopped = True
 
         motor_positions = dmR.log_motor_positions()
 
-        for motor_id in range(len(motor_positions)-1): #only iterating through non-gripper motors
-            if joint_orientations[motor_id] == -1: #handling reversed motors
-                val = motor_positions[motor_id] + offsets[motor_id]
-                difference = start_angles[motor_id] - val
-                urL_angles[motor_id] = start_angles[motor_id] + difference
-            else:
-                urL_angles[motor_id] = motor_positions[motor_id] + offsets[motor_id]
+        #if 20% avg difference between last pos and curr pos, kill control, return home, and exit loop
+        if not compare_pos(motor_positions[:-1], prev_pos, 0.2):
+            dmR.enable_control = False
+            urL_angles = URL_start_angles
+            stopped = True
+
+        #if within 10% avg difference between gello start config and current gello config, start control
+        if compare_pos(motor_positions[:-1], default_gello_pos, 0.08):
+            dmR.enable_control = True
+
+        if dmR.enable_control: 
+            for motor_id in range(len(motor_positions)-1): #only iterating through non-gripper motors
+                delta = motor_positions[motor_id] - default_gello_pos[motor_id]
+                if joint_orientations[motor_id] == -1: #handling reversed motors
+                    delta *= -1
+                    urL_angles[motor_id] = URL_start_angles[motor_id] + delta 
+                else:
+                    urL_angles[motor_id] = URL_start_angles[motor_id] + delta
 
         print(f'|  URL : {urL_angles} |')
         print(f'| GELLO: {motor_positions} |')
         print('============================================================')
+
+        move = True
+        for id in range(len(URL_start_angles)):
+            if urL_angles[id] not in range (URL_start_angles[id] - half_range, URL_start_angles[id] + half_range):
+                move = False
+                break
+        if move:
+            url.move_joint(urL_angles)
+
+        prev_pos = motor_positions[:-1]
 
         #time control 
         while (time.time()) < (last_refresh + 1.0/base_refresh_rate):
@@ -361,5 +400,5 @@ if __name__ == "__main__":
         #print(f'refresh rate: {1.0/time_elapsed} Hz')
     
     #return to home when done 
-    urr.move_joint(DEFAULT_UR3E_POS['right'])
-    url.move_joint(DEFAULT_UR3E_POS['left'])
+    #urr.move_joint(DEFAULT_UR3E_POS['right'])
+    #url.move_joint(DEFAULT_UR3E_POS['left'])

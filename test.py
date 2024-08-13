@@ -27,54 +27,42 @@ start_angles = [0, 3*np.pi/2, np.pi/2, 3*np.pi/2, 3*np.pi/2, 0]
 #gello info
 
 #-1.0334554334554336
-offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, 0.00012210012210012692, -2.056166056166056]
-offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, -1, -2.056166056166056]
+offsets = [0, 0.9896214896214897, -0.5402930402930404, 1.49995115995116, 0.00012210012210012692, -1.056166056166056]
 joint_orientations = [1, 1, -1, 1, 1, 1]
 gripper_open_pos = 1206
 gripper_range = 550
+
+start_vals = [
+        -4.065179173146383,
+        -0.8556114000133057,
+        1.419995133076803,
+        -3.108495374719137,
+        -1.3419583479510706,
+        0,
+    ]
 
 for id in range(len(offsets)):
   offsets[id] = offsets[id] * np.pi
 
 def init_controller(model, data):
-  pass
-  #data.qpos[0] = start_angles[0]
-  #data.qpos[1] = start_angles[1]
-  #data.qpos[2] = start_angles[2]
-  #data.qpos[3] = start_angles[3]
-  #data.qpos[4] = start_angles[4]
-  #data.qpos[5] = start_angles[5]
+  data.qpos[16] = start_vals[0]
+  data.qpos[17] = start_vals[1]
+  data.qpos[18] = start_vals[2]
+  data.qpos[19] = start_vals[3]
+  data.qpos[20] = start_vals[4]
+  data.qpos[21] = start_vals[5]
 
 #range of input angles: -pi to pi
 def controller(model, data):
   #gello data recording
-
-  #right arm
-  offset = 16 #in array positions to control the right arm instead of the left
-  motor_positions = dmR.log_motor_positions()
-  print(motor_positions)
-
-  for motor_id in range(len(motor_positions)-1): #only iterating through non-gripper motors
-    if joint_orientations[motor_id] == -1: #handling reversed motors
-        val = motor_positions[motor_id] + offsets[motor_id]
-        difference = start_angles[motor_id] - val
-        data.qpos[motor_id + offset] = start_angles[motor_id] + difference
-    else:
-      data.qpos[motor_id + offset] = motor_positions[motor_id] + offsets[motor_id]
-  
-  #right hand
-  trigger_pos = dmR.get_position(7)
-
-  data.qpos[22] = ability_macro(trigger_pos)
-  data.qpos[23] = ability_macro(trigger_pos)
-  data.qpos[24] = ability_macro(trigger_pos)
-  data.qpos[25] = ability_macro(trigger_pos)
-  data.qpos[26] = ability_macro(trigger_pos)
-  data.qpos[27] = ability_macro(trigger_pos)
-  data.qpos[28] = ability_macro(trigger_pos)
-  data.qpos[29] = ability_macro(trigger_pos)
-  data.qpos[30] = ability_macro(trigger_pos)
-  data.qpos[31] = 2*ability_macro(trigger_pos)
+  data.qpos[16] = start_vals[0]
+  data.qpos[17] = start_vals[1]
+  data.qpos[18] = start_vals[2]
+  data.qpos[19] = start_vals[3]
+  data.qpos[20] = start_vals[4]
+  data.qpos[21] = start_vals[5]
+  print(start_vals)
+    
   
 
 #print output   
