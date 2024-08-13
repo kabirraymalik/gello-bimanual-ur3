@@ -1,4 +1,4 @@
-from dynamixel_sdk import * 
+from resources.dynamixel_sdk import * 
 import sys, tty, termios, time
 import numpy as np
 
@@ -9,6 +9,7 @@ class DynaManager():
 
         #tracks various motor types in system
         self.motors = connected_motors
+        print(self.motors)
         #Dynamixel motor pin info
         xl430_info = {'enable_torque': 64,          'set_position': 116,
                     'set_velocity_P': 78,           'get_position': 132, 
@@ -38,6 +39,7 @@ class DynaManager():
 
         self.portHandler = PortHandler(device_name)
         self.packetHandler = PacketHandler(PROTOCOL_VERSION)
+        self.enable_control = False
 
         if self.portHandler.openPort():
             print("Succeeded to open the port")
@@ -182,8 +184,10 @@ class DynaManager():
         dxl_present_position, dxl_comm_result, dxl_error = self.packetHandler.read4ByteTxRx(self.portHandler, motor_ID, self.get_motor_info(motor_ID,'get_position'))
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % self.packetHandler.getTxRxResult(dxl_comm_result))
+            return -1
         elif dxl_error != 0:
             print("%s" % self.packetHandler.getRxPacketError(dxl_error))
+            return -1
         else:
             return dxl_present_position
     
@@ -306,16 +310,28 @@ class DynaManager():
         return output
 
     def read_motor_positions_rad(self):
-            output = "|"
-            for motor in range(1,len(self.motors)):
-                pos = (self.get_position(motor)/4095)*2*np.pi
-                output = output + f" motor {motor}: {pos} rad |"
-            print(output)
-            return output
+        output = "|"
+        for motor in range(1,len(self.motors)):
+            pos = (self.get_position(motor)/4095)*2*np.pi
+            output = output + f" motor {motor}: {pos} rad |"
+        print(output)
+        return output
     
     def log_motor_positions(self):
-        out = []
+        output = []
+        for motor in range(1,len(self.motors)+1):
+            pos = self.get_position(motor)
+            if pos > 1000000:#sorry
+                pos = 0.1
+            in_rad = (pos/4095)*2*np.pi
+            output.append(in_rad)
+        #print(output)
+        return output
+    
+    def enable_torque_all(self):
         for motor in range(1, len(self.motors)):
-            pos = (self.get_position(motor)/4095)*2*np.pi
-            out.append(pos)
-        return out
+            self.enable_torque(motor)
+
+    def disable_torque_all(self):
+        for motor in range(1, len(self.motors)):
+            self.disable_torque(motor)
